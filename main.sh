@@ -15,6 +15,37 @@ fi
 
 tele_url="https://api.telegram.org/bot${token}"
 
+function message_usage() {
+    cat <<-EOF
+usage:  A3BshBot [options]
+
+operations:
+ general
+   -v, --version    display version information
+   -h, --help       display help information
+
+EOF
+}
+
+function message_version() {
+  local version='v0.001'
+    echo "cupubot $version"
+}
+
+function get_options_from_arguments() {   
+    # ! : indirect expansion
+    while [[ -n "${!OPTIND}" ]]; do
+        case "${!OPTIND}" in
+            version)   
+                message_version
+                exit;;
+        esac
+
+        shift $OPTIND
+        OPTIND=1
+    done
+}
+
 ### -- last update --
 # save last message id.
 last_id_file=$BASEDIR/id.txt
@@ -133,4 +164,5 @@ function loop_reply() {
 
 ### -- main --
 
-loop_reply
+get_options_from_arguments "$@"
+
